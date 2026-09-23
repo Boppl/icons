@@ -2,23 +2,26 @@
   "name": "@boppl/icons",
   "version": "1.2.0",
   "description": "This is a collection of icons used at Bopple.",
-  "author": "Renan Sigolo",
   "license": "UNLICENSED",
+  "author": "Bopple",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Boppl/Icons.git"
+    "url": "git+https://github.com/Boppl/icons.git"
   },
+  "files": [
+    "ic16",
+    "ic24"
+  ],
   "sideEffects": false,
   "exports": {
     "./ic16/*": "./ic16/*",
     "./ic24/*": "./ic24/*",
     "./package.json": "./package.json"
   },
-  "files": [
-    "ic16",
-    "ic24"
-  ],
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
+  },
+  "scripts": {
+    "release": "./scripts/release.sh"
   }
 }
