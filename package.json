@@ -8,7 +8,19 @@
     "type": "git",
     "url": "git+https://github.com/Boppl/icons.git"
   },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
   "sideEffects": false,
+  "exports": {
+    "./package.json": "./package.json",
+    "./react/*": {
+      "types": "./dist/react/*/index.d.ts",
+      "default": "./dist/react/*/index.js"
+    },
+    "./*": "./dist/*"
+  },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
@@ -19,11 +31,17 @@
     "build": "node scripts/build.mjs",
     "prepack": "npm run build"
   },
-  "files": [
-    "dist"
-  ],
-  "exports": {
-    "./package.json": "./package.json",
-    "./*": "./dist/*"
+  "devDependencies": {
+    "@svgr/core": "8.1.0",
+    "@svgr/plugin-jsx": "8.1.0",
+    "esbuild": "0.28.2"
+  },
+  "peerDependencies": {
+    "react": ">=19"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
   }
 }

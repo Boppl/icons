@@ -1,16 +1,65 @@
-// Builds the published icons into dist/svg/, one folder per size in src/,
-// dropping the size prefix from each name, e.g. src/16/ic16_chevron-up.svg ->
-// dist/svg/16/chevron-up.svg.
+// Builds the published icons into dist/, one folder per size in src/:
+//
+//   dist/svg/16/chevron-up.svg      the SVG, without the size prefix
+//   dist/react/16/ChevronUpIcon.js  a React component for it
+//   dist/react/16/index.js          every component for the size, plus types
 //
 // Runs automatically before the package is packed or published (prepack).
 
-import { copyFileSync, mkdirSync, readdirSync, rmSync } from "node:fs";
+import { copyFileSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+
+import { transform as svgr } from "@svgr/core";
+import { transform as esbuild } from "esbuild";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const src = join(root, "src");
 const dist = join(root, "dist");
+
+// Same output the apps used with vite-plugin-svgr, so the icons render as before.
+// React 19 passes ref as a regular prop, so it reaches the <svg> through the
+// props spread without wrapping every icon in forwardRef.
+const svgrOptions = {
+  plugins: ["@svgr/plugin-jsx"],
+  jsxRuntime: "automatic",
+  exportType: "named",
+  titleProp: true,
+  svgo: false,
+};
+
+// Minified apart from identifiers, so component names still show in React DevTools
+const esbuildOptions = {
+  loader: "jsx",
+  jsx: "automatic",
+  format: "esm",
+  minifyWhitespace: true,
+  minifySyntax: true,
+};
+
+const types = `import type { JSX, SVGProps } from "react";
+
+type Icon = (props: SVGProps<SVGSVGElement> & { title?: string; titleId?: string }) => JSX.Element;
+`;
+
+// chevron-up -> ChevronUpIcon
+const toComponentName = (name) =>
+  name
+    .split(/[^a-zA-Z0-9]+/)
+    .filter(Boolean)
+    .map((word) => word[0].toUpperCase() + word.slice(1))
+    .join("") + "Icon";
+
+// React creates <svg> in the SVG namespace itself, so the default xmlns is dead weight
+const toComponent = async (svg, componentName) => {
+  const jsx = await svgr(
+    svg.replace(' xmlns="http://www.w3.org/2000/svg"', ""),
+    { ...svgrOptions, namedExport: componentName },
+    { componentName },
+  );
+  const { code } = await esbuild(jsx, esbuildOptions);
+  return code;
+};
 
 const sizes = readdirSync(src, { withFileTypes: true })
   .filter((entry) => entry.isDirectory())
@@ -20,12 +69,14 @@ rmSync(dist, { recursive: true, force: true });
 
 for (const size of sizes) {
   const prefix = `ic${size}_`;
-  const output = join(dist, "svg", size);
+  const svgOutput = join(dist, "svg", size);
+  const reactOutput = join(dist, "react", size);
 
-  mkdirSync(output, { recursive: true });
+  mkdirSync(svgOutput, { recursive: true });
+  mkdirSync(reactOutput, { recursive: true });
 
-  let count = 0;
-  for (const file of readdirSync(join(src, size))) {
+  const icons = [];
+  for (const file of readdirSync(join(src, size)).sort()) {
     if (file.startsWith(".")) continue;
 
     if (!file.startsWith(prefix) || !file.endsWith(".svg")) {
@@ -33,9 +84,46 @@ for (const size of sizes) {
       continue;
     }
 
-    copyFileSync(join(src, size, file), join(output, file.slice(prefix.length)));
-    count++;
+    const name = file.slice(prefix.length, -".svg".length);
+    const componentName = toComponentName(name);
+
+    // Names that only differ in punctuation or case (e.g. google-analytics and
+    // googleanalytics) would overwrite each other on case-insensitive file systems
+    const clash = icons.find(
+      (icon) => icon.componentName.toLowerCase() === componentName.toLowerCase(),
+    );
+    if (clash || !/^[A-Z]/.test(componentName)) {
+      throw new Error(
+        `src/${size}/${file} can't become ${componentName}${clash ? `, it clashes with ${clash.file}` : ""}`,
+      );
+    }
+
+    icons.push({ file, name, componentName });
   }
 
-  console.log(`Built ${count} icons into dist/svg/${size}/`);
+  await Promise.all(
+    icons.map(async ({ file, name, componentName }) => {
+      const source = join(src, size, file);
+      copyFileSync(source, join(svgOutput, `${name}.svg`));
+      writeFileSync(
+        join(reactOutput, `${componentName}.js`),
+        await toComponent(readFileSync(source, "utf8"), componentName),
+      );
+    }),
+  );
+
+  writeFileSync(
+    join(reactOutput, "index.js"),
+    icons
+      .map(({ componentName }) => `export { ${componentName} } from "./${componentName}.js";\n`)
+      .join(""),
+  );
+  writeFileSync(
+    join(reactOutput, "index.d.ts"),
+    types +
+      "\n" +
+      icons.map(({ componentName }) => `export declare const ${componentName}: Icon;\n`).join(""),
+  );
+
+  console.log(`Built ${icons.length} icons into dist/svg/${size}/ and dist/react/${size}/`);
 }

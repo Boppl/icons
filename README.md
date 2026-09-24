@@ -4,22 +4,39 @@ This is a collection of icons used at Bopple.
 
 ## Usage
 
-Icons are published by size, named without a prefix:
+### React
+
+Each size exports a React component per icon, named after the icon in PascalCase with an `Icon` suffix (`chevron-up` becomes `ChevronUpIcon`):
+
+```jsx
+import { ChevronUpIcon } from "@boppl/icons/react/16";
+import { ChevronUpIcon as ChevronUpIcon24 } from "@boppl/icons/react/24";
+
+<ChevronUpIcon className="icon" title="Expand" titleId="expand" />;
+```
+
+The components pass their props to the `<svg>`, including `ref`, and render a `<title>` when `title` is set. Only the icons you import end up in your bundle. React 19 or later is required.
+
+### SVG
+
+The raw SVGs are published by size, named without a prefix:
 
 ```js
-import ChevronUp16 from "@boppl/icons/svg/16/chevron-up.svg";
-import ChevronUp24 from "@boppl/icons/svg/24/chevron-up.svg";
+import chevronUp16 from "@boppl/icons/svg/16/chevron-up.svg";
+import chevronUp24 from "@boppl/icons/svg/24/chevron-up.svg";
 ```
 
 ## Adding icons
 
-Add the SVGs to the folder for their size in `src/`, named with the size prefix, e.g. `src/16/ic16_<name>.svg`. The build copies them into `dist/svg/` without the prefix, e.g. `dist/svg/16/<name>.svg`:
+Add the SVGs to the folder for their size in `src/`, named with the size prefix, e.g. `src/16/ic16_<name>.svg`. The build copies them into `dist/svg/` without the prefix and generates the React components in `dist/react/`:
 
 ```bash
 npm run build
 ```
 
-It runs automatically when the package is packed or published, and `dist/` is not committed. A new size only needs a new folder in `src/` (e.g. `src/20/` with `ic20_<name>.svg` files), and is then imported as `@boppl/icons/svg/20/<name>.svg`.
+It runs automatically when the package is packed or published, and `dist/` is not committed. The build fails if two icons of the same size would get the same component name, e.g. `google-analytics` and `googleanalytics`.
+
+A new size only needs a new folder in `src/` (e.g. `src/20/` with `ic20_<name>.svg` files), and is then available from `@boppl/icons/react/20` and `@boppl/icons/svg/20/<name>.svg`.
 
 ## Releasing
 
