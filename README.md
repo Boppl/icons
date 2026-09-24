@@ -10,10 +10,14 @@ Each size exports a React component per icon, named after the icon in PascalCase
 
 ```jsx
 import { ChevronUpIcon } from "@boppl/icons/react/16";
-import { ChevronUpIcon as ChevronUpIcon24 } from "@boppl/icons/react/24";
+import { ChevronUpIcon } from "@boppl/icons/react/24";
 
 <ChevronUpIcon className="icon" title="Expand" titleId="expand" />;
 ```
+
+The 24x24 icons can be imported from `@boppl/icons/react/24`, the 16x16 icons can be imported from `@boppl/icons/react/16`.
+
+Icons use an upper camel case naming convention and are always suffixed with the word `Icon`.
 
 The components pass their props to the `<svg>`, including `ref`, and render a `<title>` when `title` is set. Only the icons you import end up in your bundle. React 19 or later is required.
 
@@ -34,7 +38,7 @@ Add the SVGs to the folder for their size in `src/`, named with the size prefix,
 npm run build
 ```
 
-It runs automatically when the package is packed or published, and `dist/` is not committed. The build fails if two icons of the same size would get the same component name, e.g. `google-analytics` and `googleanalytics`.
+It runs automatically when the package is packed or published, and `dist/` is not committed. The build will fail if two icons of the same size would get the same component name, e.g. `google-analytics` and `googleanalytics`.
 
 A new size only needs a new folder in `src/` (e.g. `src/20/` with `ic20_<name>.svg` files), and is then available from `@boppl/icons/react/20` and `@boppl/icons/svg/20/<name>.svg`.
 
