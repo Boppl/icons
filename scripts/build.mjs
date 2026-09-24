@@ -1,17 +1,18 @@
 // Builds the published icons into dist/, one folder per size in src/:
 //
-//   dist/svg/16/chevron-up.svg      the SVG, without the size prefix
+//   dist/svg/16/chevron-up.svg      the SVG, optimized, without the size prefix
 //   dist/react/16/ChevronUpIcon.js  a React component for it
 //   dist/react/16/index.js          every component for the size, plus types
 //
 // Runs automatically before the package is packed or published (prepack).
 
-import { copyFileSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { transform as svgr } from "@svgr/core";
 import { transform as esbuild } from "esbuild";
+import { optimize } from "svgo";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const src = join(root, "src");
@@ -50,10 +51,19 @@ const toComponentName = (name) =>
     .map((word) => word[0].toUpperCase() + word.slice(1))
     .join("") + "Icon";
 
+// SVGO's default preset keeps the viewBox, dimensions and titles. prefixIds gives
+// each icon its own ids (e.g. ic16-google-analytics__a), as several icons share ids
+// like "a" and would pick up each other's clip paths when inlined on the same page.
+const optimizeSvg = (svg, id) =>
+  optimize(svg, {
+    multipass: true,
+    plugins: ["preset-default", "sortAttrs", { name: "prefixIds", params: { prefix: id } }],
+  }).data;
+
 // React creates <svg> in the SVG namespace itself, so the default xmlns is dead weight
 const toComponent = async (svg, componentName) => {
   const jsx = await svgr(
-    svg.replace(' xmlns="http://www.w3.org/2000/svg"', ""),
+    optimize(svg, { plugins: ["removeXMLNS"] }).data,
     { ...svgrOptions, namedExport: componentName },
     { componentName },
   );
@@ -103,11 +113,11 @@ for (const size of sizes) {
 
   await Promise.all(
     icons.map(async ({ file, name, componentName }) => {
-      const source = join(src, size, file);
-      copyFileSync(source, join(svgOutput, `${name}.svg`));
+      const svg = optimizeSvg(readFileSync(join(src, size, file), "utf8"), `ic${size}-${name}`);
+      writeFileSync(join(svgOutput, `${name}.svg`), svg);
       writeFileSync(
         join(reactOutput, `${componentName}.js`),
-        await toComponent(readFileSync(source, "utf8"), componentName),
+        await toComponent(svg, componentName),
       );
     }),
   );

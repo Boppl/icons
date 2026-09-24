@@ -32,7 +32,7 @@ import chevronUp24 from "@boppl/icons/svg/24/chevron-up.svg";
 
 ## Adding icons
 
-Add the SVGs to the folder for their size in `src/`, named with the size prefix, e.g. `src/16/ic16_<name>.svg`. The build copies them into `dist/svg/` without the prefix and generates the React components in `dist/react/`:
+Add the SVGs to the folder for their size in `src/`, named with the size prefix, e.g. `src/16/ic16_<name>.svg`. The build optimizes them with [SVGO](https://svgo.dev/), writes them to `dist/svg/` without the prefix, and generates the React components in `dist/react/`. SVGO keeps each icon's size, `viewBox` and title, and prefixes its ids with the icon's name (e.g. `ic16-google-analytics__a`), so icons on the same page can't pick up each other's clip paths or gradients:
 
 ```bash
 npm run build

@@ -34,7 +34,8 @@
   "devDependencies": {
     "@svgr/core": "8.1.0",
     "@svgr/plugin-jsx": "8.1.0",
-    "esbuild": "0.28.2"
+    "esbuild": "0.28.2",
+    "svgo": "4.1.0"
   },
   "peerDependencies": {
     "react": ">=19"
