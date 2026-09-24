@@ -48,11 +48,13 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Every tag gets a release, so the two can never drift apart.
+      # Every tag gets a release, so the two can never drift apart. The notes are
+      # this version's section of CHANGELOG.md, which the release commit updates.
       - name: Create the GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create "$GITHUB_REF_NAME" \
-            --title "$GITHUB_REF_NAME" \
-            --generate-notes
+          awk -v tag="$GITHUB_REF_NAME" '/^## / { found = ($2 == tag); next } found' CHANGELOG.md |
+            gh release create "$GITHUB_REF_NAME" \
+              --title "$GITHUB_REF_NAME" \
+              --notes-file -

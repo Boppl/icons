@@ -99,9 +99,11 @@ release() {
     exit 1
   fi
 
-  # Bump package.json, commit and tag the new version (npm prints the tag, e.g. v1.2.1),
-  # then push both together
-  new_tag=$(npm version "$version_type" -m "chore: release v%s")
+  # Bump package.json, regenerate CHANGELOG.md (the version script in package.json),
+  # then commit and tag the new version and push both together. The new version is
+  # read back from package.json, as the version script also prints to stdout.
+  npm version "$version_type" -m "chore: release v%s"
+  new_tag="v$(node -p "require('./package.json').version")"
   git push --atomic origin main "$new_tag"
 
   # -- GitHub Action will run, publish the package and create the release --
