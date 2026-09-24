@@ -8,22 +8,22 @@
     "type": "git",
     "url": "git+https://github.com/Boppl/icons.git"
   },
-  "files": [
-    "ic16",
-    "ic24"
-  ],
   "sideEffects": false,
-  "exports": {
-    "./ic16/*": "./ic16/*",
-    "./ic24/*": "./ic24/*",
-    "./package.json": "./package.json"
-  },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "release": "./scripts/release.sh",
     "changelog": "bash -c 'source scripts/changelog.sh; generate_changelog \"$1\"' --",
-    "version": "npm run changelog \"$npm_package_version\" && git add CHANGELOG.md"
+    "version": "npm run changelog \"$npm_package_version\" && git add CHANGELOG.md",
+    "build": "node scripts/build.mjs",
+    "prepack": "npm run build"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    "./package.json": "./package.json",
+    "./*": "./dist/*"
   }
 }
