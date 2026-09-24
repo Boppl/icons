@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.0.0 - 2026-09-24
+
+- docs: adjust react import instructions
+- feat: add react components
+- refactor: shorter path for svg icons
+- feat: add changelog
+
 ## v1.2.1 - 2026-09-23
 
 - ci: add automated release script
