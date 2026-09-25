@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.1.0 - 2026-09-25
+
+- feat: add icons from orders web app
+- feat: add icons from venue manager
+- feat: add svgo optimizations
+
 ## v2.0.0 - 2026-09-24
 
 - docs: adjust react import instructions
