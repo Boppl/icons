@@ -54,10 +54,18 @@ const toComponentName = (name) =>
 // SVGO's default preset keeps the viewBox, dimensions and titles. prefixIds gives
 // each icon its own ids (e.g. ic16-google-analytics__a), as several icons share ids
 // like "a" and would pick up each other's clip paths when inlined on the same page.
+//
+// removeUselessStrokeAndFill is off because many icons get their fill and stroke
+// colour from the apps' CSS: SVGO can't see that, so it would drop stroke-width and
+// line caps from icons with no stroke colour of their own (e.g. 32/sign-in).
 const optimizeSvg = (svg, id) =>
   optimize(svg, {
     multipass: true,
-    plugins: ["preset-default", "sortAttrs", { name: "prefixIds", params: { prefix: id } }],
+    plugins: [
+      { name: "preset-default", params: { overrides: { removeUselessStrokeAndFill: false } } },
+      "sortAttrs",
+      { name: "prefixIds", params: { prefix: id } },
+    ],
   }).data;
 
 // React creates <svg> in the SVG namespace itself, so the default xmlns is dead weight
