@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.2.0 - 2026-09-28
+
+- feat: add payment icons from web app
+- feat: add orders web add icons
+- feat: add vm icons
+- feat: add vm missing icons
+
 ## v2.1.0 - 2026-09-25
 
 - feat: add icons from orders web app
