@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.3.0 - 2026-09-29
+
+- ci: add gh pages deployment
+- feat: add icons preview
+
 ## v2.2.0 - 2026-09-28
 
 - feat: add payment icons from web app
