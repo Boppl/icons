@@ -1,0 +1,829 @@
+<title>Bopple Icons</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+  /* Layout: a sticky search bar over an icon grid, with a detail panel beside it
+     (a bottom sheet on phones). Tokens come from @boppl/design-system. */
+  :root {
+    --bg: #f9fafa;
+    /* neutral-100 */
+    --surface: #ffffff;
+    /* base-white */
+    --sunken: #f4f5f5;
+    /* neutral-200 */
+    --ink: #1a1a1a;
+    /* neutral-900 */
+    --muted: #656565;
+    /* neutral-700 */
+    --line: #e3e3e3;
+    /* neutral-300 */
+    --accent: #6558ff;
+    /* accent-600 */
+    --accent-strong: #4e45d0;
+    /* accent-700 */
+    --accent-soft: #ede6ff;
+    /* accent-200 */
+    --grid-line: rgba(101, 88, 255, 0.16);
+    --font-ui: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-code: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #09090b;
+      --surface: #1a1a1a;
+      --sunken: #222222;
+      --ink: #f4f5f5;
+      --muted: #a1a1a1;
+      --line: #333333;
+      --accent: #bba7ff;
+      --accent-strong: #dfd4ff;
+      --accent-soft: rgba(101, 88, 255, 0.24);
+      --grid-line: rgba(187, 167, 255, 0.16);
+      color-scheme: dark;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #09090b;
+    --surface: #1a1a1a;
+    --sunken: #222222;
+    --ink: #f4f5f5;
+    --muted: #a1a1a1;
+    --line: #333333;
+    --accent: #bba7ff;
+    --accent-strong: #dfd4ff;
+    --accent-soft: rgba(101, 88, 255, 0.24);
+    --grid-line: rgba(187, 167, 255, 0.16);
+    color-scheme: dark;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font: 400 14px/1.5 var(--font-ui);
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  code {
+    font-family: var(--font-code);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .page {
+    max-width: 1280px;
+    margin-inline: auto;
+    padding: 32px 24px 64px;
+    display: grid;
+    gap: 24px;
+  }
+
+  header.intro {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px 24px;
+  }
+
+  .intro h1 {
+    margin: 0;
+    font-size: 1.875rem;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .intro h1 span {
+    color: var(--accent);
+  }
+
+  .intro p {
+    margin: 4px 0 0;
+    color: var(--muted);
+    max-width: 60ch;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .meta code {
+    background: var(--sunken);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 2px 6px;
+    color: var(--ink);
+  }
+
+  .toolbar {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 5;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    padding-block: 12px;
+    background: var(--bg);
+  }
+
+  .search {
+    flex: 1 1 320px;
+    min-width: 0;
+    position: relative;
+  }
+
+  .search svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    translate: 0 -50%;
+    width: 18px;
+    height: 18px;
+    fill: var(--muted);
+    pointer-events: none;
+  }
+
+  .search input {
+    width: 100%;
+    height: 44px;
+    padding: 0 44px 0 42px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+    font: inherit;
+    font-size: 15px;
+  }
+
+  .search input::placeholder {
+    color: var(--muted);
+  }
+
+  .search input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  .search kbd {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    translate: 0 -50%;
+    font: 500 12px var(--font-code);
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 1px 6px;
+  }
+
+  .segmented {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 10px;
+    background: var(--sunken);
+    border: 1px solid var(--line);
+  }
+
+  .segmented button {
+    border: 0;
+    background: transparent;
+    border-radius: 7px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .segmented button small {
+    font-weight: 400;
+    margin-left: 4px;
+    opacity: 0.75;
+  }
+
+  .segmented button[aria-pressed="true"] {
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  }
+
+  .zoom-label {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .count {
+    margin: 0 0 12px;
+    color: var(--muted);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+    gap: 8px;
+  }
+
+  .card {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    justify-items: center;
+    align-items: center;
+    gap: 8px;
+    aspect-ratio: 1 / 1.05;
+    max-width: 100%;
+    padding: 12px 8px 10px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--ink);
+    transition: border-color 120ms, background 120ms;
+  }
+
+  .card:hover {
+    border-color: var(--line);
+  }
+
+  .card[aria-pressed="true"] {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .card .label {
+    width: 100%;
+    font-size: 11.5px;
+    line-height: 1.3;
+    color: var(--muted);
+    text-align: center;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Icons get their colour from CSS in the apps: the root fill="none" is overridden
+     so paths inherit currentColor, and stroke-only icons get a stroke too */
+  .glyph {
+    display: grid;
+    place-items: center;
+    color: var(--ink);
+    max-width: 100%;
+  }
+
+  .glyph svg {
+    width: calc(var(--w) * var(--zoom) * 1px);
+    height: calc(var(--h) * var(--zoom) * 1px);
+    max-width: 100%;
+    fill: currentColor;
+  }
+
+  .glyph.stroked svg {
+    stroke: currentColor;
+  }
+
+  /* Named groups such as misc hold graphics of any size: wider cards, each graphic
+     scaled down to fit (an svg keeps its proportions inside a capped box) */
+  .grid.wide {
+    grid-template-columns: repeat(auto-fill, minmax(176px, 1fr));
+  }
+
+  .grid.wide .card {
+    aspect-ratio: auto;
+    min-height: 150px;
+  }
+
+  .grid.wide .glyph svg {
+    width: calc(var(--w) * 1px);
+    height: calc(var(--h) * 1px);
+    max-height: 96px;
+  }
+
+  .empty {
+    padding: 48px 16px;
+    text-align: center;
+    color: var(--muted);
+    border: 1px dashed var(--line);
+    border-radius: 12px;
+  }
+
+  .empty p {
+    margin: 0 0 12px;
+  }
+
+  .empty .suggest {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .chip {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    border-radius: 999px;
+    padding: 4px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .chip[aria-pressed="true"] {
+    border-color: var(--accent);
+    color: var(--accent-strong);
+    background: var(--accent-soft);
+  }
+
+  .detail {
+    position: sticky;
+    top: calc(env(safe-area-inset-top, 0px) + 80px);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px;
+    display: grid;
+    gap: 16px;
+    min-width: 0;
+  }
+
+  .detail .hint {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .detail h2 {
+    margin: 0;
+    font-size: 1.125rem;
+    line-height: 1.3;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  .detail .component {
+    margin: 2px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .detail .close {
+    display: none;
+  }
+
+  .canvas {
+    display: grid;
+    place-items: center;
+    min-height: 176px;
+    border-radius: 10px;
+    background: var(--sunken);
+    overflow: hidden;
+  }
+
+  .canvas .frame {
+    display: grid;
+    place-items: center;
+    max-width: 100%;
+    outline: 1px dashed var(--grid-line);
+  }
+
+  .canvas .frame.pixels {
+    background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: calc(var(--scale) * 1px) calc(var(--scale) * 1px);
+  }
+
+  .canvas .glyph svg {
+    width: calc(var(--w) * var(--scale) * 1px);
+    height: calc(var(--h) * var(--scale) * 1px);
+    max-height: none;
+  }
+
+  .canvas-caption {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .sizes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .snippets {
+    display: grid;
+    gap: 10px;
+  }
+
+  .snippet {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .snippet-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .snippet-head span {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .snippet pre {
+    margin: 0;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: var(--sunken);
+    border: 1px solid var(--line);
+    font: 12px/1.5 var(--font-code);
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  .copy {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    border-radius: 6px;
+    padding: 2px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    min-width: 64px;
+  }
+
+  .copy:hover {
+    border-color: var(--accent);
+    color: var(--accent-strong);
+  }
+
+  .copy.done {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+  }
+
+  footer {
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  footer code {
+    color: var(--ink);
+  }
+
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .detail {
+      position: fixed;
+      inset: auto 0 0 0;
+      top: auto;
+      z-index: 10;
+      border-radius: 16px 16px 0 0;
+      max-height: 78vh;
+      overflow-y: auto;
+      padding: 20px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+      box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.18);
+    }
+
+    .detail.idle {
+      display: none;
+    }
+
+    .detail .close {
+      display: inline-block;
+      justify-self: end;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .page {
+      padding: 20px 16px 48px;
+    }
+
+    .grid {
+      grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+    }
+
+    .search kbd {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card {
+      transition: none;
+    }
+  }
+</style>
+
+<div class="page">
+  <header class="intro">
+    <div>
+      <h1>Bopple <span>Icons</span></h1>
+      <p>Every icon in <code>@boppl/icons</code>. Search by name, pick a size, and copy the React import or the SVG.</p>
+    </div>
+    <div class="meta" id="meta"></div>
+  </header>
+
+  <div class="toolbar">
+    <label class="search">
+      <svg viewBox="0 0 20 20" aria-hidden="true">
+        <path fill-rule="evenodd"
+          d="M9 3.5a5.5 5.5 0 1 0 3.36 9.86l3.64 3.64a.75.75 0 1 0 1.06-1.06l-3.64-3.64A5.5 5.5 0 0 0 9 3.5ZM5 9a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z" />
+      </svg>
+      <input id="query" type="search" placeholder="Search icons, e.g. chevron, card, order" autocomplete="off"
+        spellcheck="false" aria-label="Search icons">
+      <kbd>/</kbd>
+    </label>
+    <div class="segmented" id="sizes" role="group" aria-label="Icon size"></div>
+    <span class="zoom-label" id="zoom-label">Zoom</span>
+    <div class="segmented" id="zoom" role="group" aria-labelledby="zoom-label">
+      <button type="button" data-zoom="1">1×</button>
+      <button type="button" data-zoom="2">2×</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <main>
+      <p class="count" id="count" aria-live="polite"></p>
+      <div class="grid" id="grid"></div>
+      <div class="empty" id="empty" hidden></div>
+    </main>
+    <aside class="detail idle" id="detail" aria-live="polite">
+      <p class="hint">Select an icon to see it on its pixel grid and copy its import.</p>
+    </aside>
+  </div>
+
+  <footer id="footer"></footer>
+</div>
+
+<script type="application/json" id="icon-data">/*__ICON_DATA__*/</script>
+<script>
+  const data = JSON.parse(document.getElementById("icon-data").textContent);
+  const $ = (id) => document.getElementById(id);
+  const grid = $("grid"), empty = $("empty"), count = $("count"), detail = $("detail"), query = $("query");
+
+  const store = {
+    get: (key) => { try { return localStorage.getItem(key); } catch { return null; } },
+    set: (key, value) => { try { localStorage.setItem(key, value); } catch { } },
+  };
+
+  const hashToken = location.hash.slice(1);
+  const state = {
+    size: data.sizes.includes(hashToken) ? hashToken : data.sizes.includes(store.get("icons:size")) ? store.get("icons:size") : data.sizes[0],
+    zoom: store.get("icons:zoom") === "1" ? 1 : 2,
+    query: "",
+    selected: data.icons.some((icon) => icon.name === hashToken) ? hashToken : null,
+  };
+  if (state.selected && !data.icons.find((i) => i.name === state.selected).svgs[state.size]) {
+    state.size = Object.keys(data.icons.find((i) => i.name === state.selected).svgs)[0];
+  }
+
+  const escapeHtml = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const byName = new Map(data.icons.map((icon) => [icon.name, icon]));
+  const countAt = (size) => data.icons.filter((icon) => icon.svgs[size]).length;
+  // Numeric groups are sizes (16 -> "16px"), others hold graphics of any size (misc -> "Misc")
+  const isSize = (group) => /^\d+$/.test(group);
+  const groupLabel = (group) => (isSize(group) ? `${group}px` : group[0].toUpperCase() + group.slice(1));
+  const where = (group) => (isSize(group) ? `at ${group}px` : `in ${groupLabel(group)}`);
+  const glyph = (icon, size, style = "") => {
+    const [w, h] = icon.dims[size];
+    return `<span class="glyph${icon.stroked[size] ? " stroked" : ""}" style="--w:${w};--h:${h};${style}">${icon.svgs[size]}</span>`;
+  };
+
+  // Header facts
+  $("meta").innerHTML = [
+    `<code>@boppl/icons@${escapeHtml(data.version)}</code>`,
+    `<span>${data.icons.length} icons and graphics in ${data.sizes.length} groups</span>`,
+  ].join("");
+  $("footer").innerHTML = `Generated from <code>@boppl/icons@${escapeHtml(data.version)}</code> on ${escapeHtml(data.generated)}. Regenerate with <code>npm run site</code> in the icons repo.`;
+
+  // Size and zoom controls
+  $("sizes").innerHTML = data.sizes
+    .map((size) => `<button type="button" data-size="${size}">${groupLabel(size)}<small>${countAt(size)}</small></button>`)
+    .join("");
+  $("sizes").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-size]");
+    if (button) setSize(button.dataset.size);
+  });
+  $("zoom").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-zoom]");
+    if (!button) return;
+    state.zoom = Number(button.dataset.zoom);
+    store.set("icons:zoom", String(state.zoom));
+    syncControls();
+  });
+
+  const syncControls = () => {
+    for (const b of $("sizes").children) b.setAttribute("aria-pressed", String(b.dataset.size === state.size));
+    for (const b of $("zoom").children) b.setAttribute("aria-pressed", String(Number(b.dataset.zoom) === state.zoom));
+    grid.style.setProperty("--zoom", state.zoom);
+  };
+
+  // Cards are built once per size, then shown or hidden as the search changes
+  const cardsBySize = new Map();
+  const cardsFor = (size) => {
+    if (!cardsBySize.has(size)) {
+      const fragment = document.createDocumentFragment();
+      const cards = data.icons.filter((icon) => icon.svgs[size]).map((icon) => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "card";
+        card.dataset.name = icon.name;
+        card.title = icon.component;
+        card.innerHTML = `${glyph(icon, size)}<span class="label">${escapeHtml(icon.name)}</span>`;
+        fragment.append(card);
+        return card;
+      });
+      cardsBySize.set(size, { fragment, cards });
+    }
+    return cardsBySize.get(size);
+  };
+
+  // "chevron up", "ChevronUp" and "chevron-up" all find chevron-up
+  const normalize = (s) => s.toLowerCase().replace(/icon$/i, "").replace(/[^a-z0-9]+/g, " ").trim();
+  const words = (s) => s.replace(/([a-z0-9])([A-Z])/g, "$1 $2");
+  const matches = (icon, terms) => terms.every((term) => icon.search.includes(term));
+  for (const icon of data.icons) icon.search = `${normalize(icon.name)} ${normalize(words(icon.component))}`;
+
+  const render = () => {
+    const { cards } = cardsFor(state.size);
+    if (grid.dataset.size !== state.size) {
+      grid.replaceChildren(...cards);
+      grid.dataset.size = state.size;
+      grid.classList.toggle("wide", !isSize(state.size));
+    }
+    const terms = normalize(words(state.query)).split(" ").filter(Boolean);
+    let shown = 0;
+    for (const card of cards) {
+      const visible = matches(byName.get(card.dataset.name), terms);
+      card.hidden = !visible;
+      card.setAttribute("aria-pressed", String(card.dataset.name === state.selected));
+      shown += visible;
+    }
+    const total = cards.length;
+    count.textContent = terms.length ? `${shown} of ${total} icons ${where(state.size)} match “${state.query.trim()}”` : `${total} icons ${where(state.size)}`;
+
+    empty.hidden = shown > 0;
+    if (!shown) {
+      const elsewhere = data.sizes
+        .filter((size) => size !== state.size)
+        .map((size) => [size, data.icons.filter((icon) => icon.svgs[size] && matches(icon, terms)).length])
+        .filter(([, n]) => n);
+      empty.innerHTML = `<p>No icons ${where(state.size)} match “${escapeHtml(state.query.trim())}”.</p>` +
+        (elsewhere.length
+          ? `<div class="suggest">${elsewhere.map(([size, n]) => `<button type="button" class="chip" data-size="${size}">${n} ${where(size)}</button>`).join("")}</div>`
+          : "");
+    }
+  };
+  empty.addEventListener("click", (event) => {
+    const chip = event.target.closest("[data-size]");
+    if (chip) setSize(chip.dataset.size);
+  });
+
+  // Detail panel
+  const snippet = (label, text) => `
+    <div class="snippet">
+      <div class="snippet-head"><span>${label}</span><button type="button" class="copy">Copy</button></div>
+      <pre><code>${escapeHtml(text)}</code></pre>
+    </div>`;
+
+  const renderDetail = () => {
+    const icon = state.selected && byName.get(state.selected);
+    detail.classList.toggle("idle", !icon);
+    if (!icon) {
+      detail.innerHTML = `<p class="hint">Select an icon to see it on its pixel grid and copy its import.</p>`;
+      return;
+    }
+    const size = icon.svgs[state.size] ? state.size : Object.keys(icon.svgs)[0];
+    const [w, h] = icon.dims[size];
+    // Sizes show on their pixel grid at a whole scale; graphics are fitted to the panel
+    const scale = isSize(size) ? Math.max(2, Math.floor(160 / Math.max(w, h))) : Math.round(Math.min(2, 260 / w, 160 / h) * 100) / 100;
+    detail.innerHTML = `
+      <button type="button" class="copy close" data-close>Close</button>
+      <div>
+        <h2>${escapeHtml(icon.name)}</h2>
+        <p class="component"><code>${escapeHtml(icon.component)}</code></p>
+      </div>
+      <div>
+        <div class="canvas"><div class="frame${isSize(size) ? " pixels" : ""}" style="--scale:${scale}">${glyph(icon, size, `--scale:${scale}`)}</div></div>
+        <div class="canvas-caption"><span>${w} × ${h}${isSize(size) ? " canvas" : ""}</span><span>shown at ${scale}×</span></div>
+      </div>
+      <div class="sizes" role="group" aria-label="Sizes of this icon">
+        ${Object.keys(icon.svgs).map((s) => `<button type="button" class="chip" data-detail-size="${s}" aria-pressed="${s === size}">${groupLabel(s)}</button>`).join("")}
+      </div>
+      <div class="snippets">
+        ${snippet("React", `import { ${icon.component} } from "@boppl/icons/react/${size}"`)}
+        ${snippet("JSX", `<${icon.component} />`)}
+        ${snippet("SVG file", `@boppl/icons/svg/${size}/${icon.name}.svg`)}
+        ${snippet("SVG markup", icon.svgs[size])}
+      </div>`;
+  };
+
+  detail.addEventListener("click", async (event) => {
+    if (event.target.closest("[data-close]")) return select(null);
+    const chip = event.target.closest("[data-detail-size]");
+    if (chip) return setSize(chip.dataset.detailSize);
+    const button = event.target.closest(".copy");
+    if (!button) return;
+    const code = button.closest(".snippet").querySelector("code");
+    try {
+      await navigator.clipboard.writeText(code.textContent);
+      flash(button, "Copied");
+    } catch {
+      // Clipboard access can be refused, so select the text for a manual copy instead
+      const range = document.createRange();
+      range.selectNodeContents(code);
+      getSelection().removeAllRanges();
+      getSelection().addRange(range);
+      flash(button, "Selected");
+    }
+  });
+
+  const flash = (button, text) => {
+    button.textContent = text;
+    button.classList.add("done");
+    setTimeout(() => { button.textContent = "Copy"; button.classList.remove("done"); }, 1400);
+  };
+
+  grid.addEventListener("click", (event) => {
+    const card = event.target.closest(".card");
+    if (card) select(card.dataset.name === state.selected ? null : card.dataset.name);
+  });
+
+  function select(name) {
+    state.selected = name;
+    render();
+    renderDetail();
+  }
+
+  function setSize(size) {
+    state.size = size;
+    store.set("icons:size", size);
+    syncControls();
+    render();
+    renderDetail();
+  }
+
+  // Search, with "/" to focus and Escape to clear or close
+  query.addEventListener("input", () => { state.query = query.value; render(); });
+  document.addEventListener("keydown", (event) => {
+    const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName);
+    if (event.key === "/" && !typing) {
+      event.preventDefault();
+      query.focus();
+    } else if (event.key === "Escape") {
+      if (state.selected) select(null);
+      else if (query.value) { query.value = ""; state.query = ""; render(); }
+    }
+  });
+
+  syncControls();
+  render();
+  renderDetail();
+</script>

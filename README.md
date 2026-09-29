@@ -42,6 +42,10 @@ It runs automatically when the package is packed or published, and `dist/` is no
 
 A new size only needs a new folder in `src/` (e.g. `src/20/` with `ic20_<name>.svg` files), and is then available from `@boppl/icons/react/20` and `@boppl/icons/svg/20/<name>.svg`.
 
+## Browsing the icons
+
+`npm run site` builds the package and writes `site/index.html`, a single page to search every icon by name and size and copy its React import, JSX or SVG. Open it in a browser; it isn't committed or published.
+
 ## Releasing
 
 Releases are cut from `main` and need the [GitHub CLI](https://cli.github.com/).
