@@ -1,6 +1,6 @@
 // Builds site/index.html: a single page to search and browse every icon, like
 // heroicons.com. It embeds the optimized SVGs from dist/svg, so run the build first
-// (`npm run site` does both). The page itself is scripts/site.html.
+// (`npm run preview` does both). The page itself is scripts/site.html.
 
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -68,10 +68,28 @@ const data = {
 
 // Escaping < keeps any "</script>" inside the SVGs from ending the data block
 const json = JSON.stringify(data).replace(/</g, "\\u003c");
-const html = readFileSync(join(root, "scripts", "site.html"), "utf8").replace(
+const page = readFileSync(join(root, "scripts", "site.html"), "utf8").replace(
   "/*__ICON_DATA__*/",
   () => json,
 );
+
+// A full document for GitHub Pages and opening the file directly. With --fragment,
+// only the page itself, for hosts that add their own <head> (a claude.ai artifact).
+const [head, body] = page.split(/\n(?=<div class="page">)/);
+const html = process.argv.includes("--fragment")
+  ? page
+  : `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+${head}
+</head>
+<body>
+${body}
+</body>
+</html>
+`;
 
 mkdirSync(join(root, "site"), { recursive: true });
 writeFileSync(join(root, "site", "index.html"), html);

@@ -44,7 +44,9 @@ A new size only needs a new folder in `src/` (e.g. `src/20/` with `ic20_<name>.s
 
 ## Browsing the icons
 
-`npm run site` builds the package and writes `site/index.html`, a single page to search every icon by name and size and copy its React import, JSX or SVG. Open it in a browser; it isn't committed or published.
+`npm run preview` builds the package and writes `site/index.html`, a single page to search every icon by name and size and copy its React import, JSX or SVG. Open it in a browser; it isn't committed or included in the package.
+
+The Pages workflow publishes the same page to GitHub Pages at https://boppl.github.io/icons/ after each release, once the Publish workflow succeeds. It can also be run by hand from the Actions tab.
 
 ## Releasing
 

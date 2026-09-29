@@ -25,12 +25,13 @@
     "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
+    "clean": "rm -rf dist node_modules site package-lock.json",
     "release": "./scripts/release.sh",
     "changelog": "bash -c 'source scripts/changelog.sh; generate_changelog \"$1\"' --",
     "version": "npm run changelog \"$npm_package_version\" && git add CHANGELOG.md",
     "build": "node scripts/build.mjs",
     "prepack": "npm run build",
-    "site": "npm run build && node scripts/site.mjs"
+    "preview": "npm run build && node scripts/site.mjs"
   },
   "devDependencies": {
     "@svgr/core": "8.1.0",

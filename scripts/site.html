@@ -63,7 +63,13 @@
     box-sizing: border-box;
   }
 
+  /* Cards are filtered with the hidden attribute, which their display: grid would otherwise override */
+  [hidden] {
+    display: none !important;
+  }
+
   body {
+    margin: 0;
     background: var(--bg);
     color: var(--ink);
     font: 400 14px/1.5 var(--font-ui);
@@ -641,7 +647,7 @@
     `<code>@boppl/icons@${escapeHtml(data.version)}</code>`,
     `<span>${data.icons.length} icons and graphics in ${data.sizes.length} groups</span>`,
   ].join("");
-  $("footer").innerHTML = `Generated from <code>@boppl/icons@${escapeHtml(data.version)}</code> on ${escapeHtml(data.generated)}. Regenerate with <code>npm run site</code> in the icons repo.`;
+  $("footer").innerHTML = `Generated from <code>@boppl/icons@${escapeHtml(data.version)}</code> on ${escapeHtml(data.generated)}. Regenerate with <code>npm run preview</code> in the icons repo.`;
 
   // Size and zoom controls
   $("sizes").innerHTML = data.sizes
