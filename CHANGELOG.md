@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.3.2 - 2026-10-01
+
+- fix: types auto-importing from wrong path
+
 ## v2.3.1 - 2026-10-01
 
 - feat: add roadmap
