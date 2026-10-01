@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.3.1 - 2026-10-01
+
+- feat: add roadmap
+
 ## v2.3.0 - 2026-09-29
 
 - ci: add gh pages deployment
