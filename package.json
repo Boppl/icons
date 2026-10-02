@@ -21,13 +21,6 @@
     },
     "./*": "./dist/*"
   },
-  "typesVersions": {
-    "*": {
-      "react/*": [
-        "./dist/react/*/index.d.ts"
-      ]
-    }
-  },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
