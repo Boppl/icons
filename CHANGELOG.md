@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.4.4 - 2026-10-23
+
+- chore: move hosting to vercel
+
 ## v2.4.3 - 2026-10-19
 
 - feat: scissors
