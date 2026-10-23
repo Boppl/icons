@@ -1,7 +1,8 @@
 // Builds site/index.html: a single page to search and browse every icon, like
 // heroicons.com. It embeds the optimized SVGs from dist/svg, so run the build first
-// (`npm run preview` does both). The page itself is scripts/site.html.
+// (`npm run build:site` does both). The page itself is scripts/site.html.
 
+import { execFileSync } from "node:child_process";
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -9,6 +10,28 @@ import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("..", import.meta.url));
 const svgDist = join(root, "dist", "svg");
 const { version } = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
+
+// The site deploys on every push to main, so it can show icons that aren't in the
+// published version yet. The footer says so, naming the commit it was built from,
+// unless this is the release commit itself, where the version is the whole story.
+const git = (...args) => {
+  try {
+    return execFileSync("git", args, { cwd: root, stdio: ["ignore", "pipe", "ignore"] })
+      .toString()
+      .trim();
+  } catch {
+    return ""; // no git, or no repository: fall back to the version alone
+  }
+};
+
+// Vercel sets these during the build; git answers locally
+const sha = process.env.VERCEL_GIT_COMMIT_SHA || git("rev-parse", "HEAD");
+const subject = (process.env.VERCEL_GIT_COMMIT_MESSAGE || git("log", "-1", "--pretty=%s")).split(
+  "\n",
+)[0];
+// npm version commits exactly this, so matching it means the page is the released icons
+const dirty = !process.env.VERCEL && git("status", "--porcelain") !== "";
+const released = !dirty && subject.trim() === `chore: release v${version}`;
 
 // Same naming as the build: chevron-up -> ChevronUpIcon
 const toComponentName = (name) =>
@@ -61,6 +84,8 @@ for (const size of sizes) {
 
 const data = {
   version,
+  released,
+  commit: released ? "" : sha.slice(0, 7),
   generated: new Date().toISOString().slice(0, 10),
   sizes,
   icons: [...icons.values()].sort((a, b) => a.name.localeCompare(b.name)),
@@ -73,7 +98,7 @@ const page = readFileSync(join(root, "scripts", "site.html"), "utf8").replace(
   () => json,
 );
 
-// A full document for GitHub Pages and opening the file directly. With --fragment,
+// A full document for hosting and opening the file directly. With --fragment,
 // only the page itself, for hosts that add their own <head> (a claude.ai artifact).
 const [head, body] = page.split(/\n(?=<div class="page">)/);
 const html = process.argv.includes("--fragment")

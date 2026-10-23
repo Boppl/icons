@@ -647,7 +647,11 @@
     `<code>@boppl/icons@${escapeHtml(data.version)}</code>`,
     `<span>${data.icons.length} icons and graphics in ${data.sizes.length} groups</span>`,
   ].join("");
-  $("footer").innerHTML = `Generated from <code>@boppl/icons@${escapeHtml(data.version)}</code> on ${escapeHtml(data.generated)}. Regenerate with <code>npm run preview</code> in the icons repo.`;
+  // Built from main between releases: say so, so the icons below aren't mistaken for published ones
+  const unreleased = data.released
+    ? ""
+    : ` · unreleased${data.commit ? ` (${escapeHtml(data.commit)})` : ""}`;
+  $("footer").innerHTML = `Generated from <code>@boppl/icons@${escapeHtml(data.version)}</code>${unreleased} on ${escapeHtml(data.generated)}. Regenerate with <code>npm run build:site</code> in the icons repo.`;
 
   // Size and zoom controls
   $("sizes").innerHTML = data.sizes

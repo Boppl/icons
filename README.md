@@ -44,9 +44,9 @@ A new size only needs a new folder in `src/` (e.g. `src/20/` with `ic20_<name>.s
 
 ## Browsing the icons
 
-`npm run preview` builds the package and writes `site/index.html`, a single page to search every icon by name and size and copy its React import, JSX or SVG. Open it in a browser; it isn't committed or included in the package.
+`npm run build:site` builds the package and writes `site/index.html`, a single page to search every icon by name and size and copy its React import, JSX or SVG. Open it in a browser; it isn't committed or included in the package.
 
-The Pages workflow publishes the same page to GitHub Pages at https://boppl.github.io/icons/ after each release, once the Publish workflow succeeds. It can also be run by hand from the Actions tab.
+The same page is hosted on Vercel, which builds it from this repository with `npm run build:site` and serves `site/`. Production shows the released icons only: `scripts/vercel-ignore-build.sh` cancels any production build that isn't a release commit, so merging an icon doesn't put it on the site before it's published. Every pull request still gets its own preview URL, where the footer marks the page as unreleased and names the commit, so a branch's icons can be browsed before they're released. The settings live in `vercel.json`; nothing needs a workflow or a secret.
 
 ## Releasing
 
