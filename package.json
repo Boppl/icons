@@ -26,6 +26,7 @@
   },
   "scripts": {
     "clean": "rm -rf dist node_modules site package-lock.json",
+    "fmt": "oxfmt",
     "release": "./scripts/release.sh",
     "changelog": "bash -c 'source scripts/changelog.sh; generate_changelog \"$1\"' --",
     "version": "npm run changelog \"$npm_package_version\" && git add CHANGELOG.md",
@@ -37,6 +38,7 @@
     "@svgr/core": "8.1.0",
     "@svgr/plugin-jsx": "8.1.0",
     "esbuild": "0.28.2",
+    "oxfmt": "0.74.0",
     "svgo": "4.1.0"
   },
   "peerDependencies": {

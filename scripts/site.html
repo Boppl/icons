@@ -1,7 +1,10 @@
 <title>Bopple Icons</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+/>
 <style>
   /* Layout: a sticky search bar over an icon grid, with a detail panel beside it
      (a bottom sheet on phones). Tokens come from @boppl/design-system. */
@@ -277,7 +280,9 @@
     border-radius: 10px;
     background: var(--surface);
     color: var(--ink);
-    transition: border-color 120ms, background 120ms;
+    transition:
+      border-color 120ms,
+      background 120ms;
   }
 
   .card:hover {
@@ -426,7 +431,9 @@
   }
 
   .canvas .frame.pixels {
-    background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
     background-size: calc(var(--scale) * 1px) calc(var(--scale) * 1px);
   }
 
@@ -571,7 +578,10 @@
   <header class="intro">
     <div>
       <h1>Bopple <span>Icons</span></h1>
-      <p>Every icon in <code>@boppl/icons</code>. Search by name, pick a size, and copy the React import or the SVG.</p>
+      <p>
+        Every icon in <code>@boppl/icons</code>. Search by name, pick a size, and copy the React
+        import or the SVG.
+      </p>
     </div>
     <div class="meta" id="meta"></div>
   </header>
@@ -579,11 +589,19 @@
   <div class="toolbar">
     <label class="search">
       <svg viewBox="0 0 20 20" aria-hidden="true">
-        <path fill-rule="evenodd"
-          d="M9 3.5a5.5 5.5 0 1 0 3.36 9.86l3.64 3.64a.75.75 0 1 0 1.06-1.06l-3.64-3.64A5.5 5.5 0 0 0 9 3.5ZM5 9a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z" />
+        <path
+          fill-rule="evenodd"
+          d="M9 3.5a5.5 5.5 0 1 0 3.36 9.86l3.64 3.64a.75.75 0 1 0 1.06-1.06l-3.64-3.64A5.5 5.5 0 0 0 9 3.5ZM5 9a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z"
+        />
       </svg>
-      <input id="query" type="search" placeholder="Search icons, e.g. chevron, card, order" autocomplete="off"
-        spellcheck="false" aria-label="Search icons">
+      <input
+        id="query"
+        type="search"
+        placeholder="Search icons, e.g. chevron, card, order"
+        autocomplete="off"
+        spellcheck="false"
+        aria-label="Search icons"
+      />
       <kbd>/</kbd>
     </label>
     <div class="segmented" id="sizes" role="group" aria-label="Icon size"></div>
@@ -608,20 +626,40 @@
   <footer id="footer"></footer>
 </div>
 
-<script type="application/json" id="icon-data">/*__ICON_DATA__*/</script>
+<script type="application/json" id="icon-data">
+  /*__ICON_DATA__*/
+</script>
 <script>
   const data = JSON.parse(document.getElementById("icon-data").textContent);
   const $ = (id) => document.getElementById(id);
-  const grid = $("grid"), empty = $("empty"), count = $("count"), detail = $("detail"), query = $("query");
+  const grid = $("grid"),
+    empty = $("empty"),
+    count = $("count"),
+    detail = $("detail"),
+    query = $("query");
 
   const store = {
-    get: (key) => { try { return localStorage.getItem(key); } catch { return null; } },
-    set: (key, value) => { try { localStorage.setItem(key, value); } catch { } },
+    get: (key) => {
+      try {
+        return localStorage.getItem(key);
+      } catch {
+        return null;
+      }
+    },
+    set: (key, value) => {
+      try {
+        localStorage.setItem(key, value);
+      } catch {}
+    },
   };
 
   const hashToken = location.hash.slice(1);
   const state = {
-    size: data.sizes.includes(hashToken) ? hashToken : data.sizes.includes(store.get("icons:size")) ? store.get("icons:size") : data.sizes[0],
+    size: data.sizes.includes(hashToken)
+      ? hashToken
+      : data.sizes.includes(store.get("icons:size"))
+        ? store.get("icons:size")
+        : data.sizes[0],
     zoom: store.get("icons:zoom") === "1" ? 1 : 2,
     query: "",
     selected: data.icons.some((icon) => icon.name === hashToken) ? hashToken : null,
@@ -630,12 +668,14 @@
     state.size = Object.keys(data.icons.find((i) => i.name === state.selected).svgs)[0];
   }
 
-  const escapeHtml = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const escapeHtml = (s) =>
+    s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
   const byName = new Map(data.icons.map((icon) => [icon.name, icon]));
   const countAt = (size) => data.icons.filter((icon) => icon.svgs[size]).length;
   // Numeric groups are sizes (16 -> "16px"), others hold graphics of any size (misc -> "Misc")
   const isSize = (group) => /^\d+$/.test(group);
-  const groupLabel = (group) => (isSize(group) ? `${group}px` : group[0].toUpperCase() + group.slice(1));
+  const groupLabel = (group) =>
+    isSize(group) ? `${group}px` : group[0].toUpperCase() + group.slice(1);
   const where = (group) => (isSize(group) ? `at ${group}px` : `in ${groupLabel(group)}`);
   const glyph = (icon, size, style = "") => {
     const [w, h] = icon.dims[size];
@@ -651,11 +691,15 @@
   const unreleased = data.released
     ? ""
     : ` · unreleased${data.commit ? ` (${escapeHtml(data.commit)})` : ""}`;
-  $("footer").innerHTML = `Generated from <code>@boppl/icons@${escapeHtml(data.version)}</code>${unreleased} on ${escapeHtml(data.generated)}. Regenerate with <code>npm run build:site</code> in the icons repo.`;
+  $("footer").innerHTML =
+    `Generated from <code>@boppl/icons@${escapeHtml(data.version)}</code>${unreleased} on ${escapeHtml(data.generated)}.`;
 
   // Size and zoom controls
   $("sizes").innerHTML = data.sizes
-    .map((size) => `<button type="button" data-size="${size}">${groupLabel(size)}<small>${countAt(size)}</small></button>`)
+    .map(
+      (size) =>
+        `<button type="button" data-size="${size}">${groupLabel(size)}<small>${countAt(size)}</small></button>`,
+    )
     .join("");
   $("sizes").addEventListener("click", (event) => {
     const button = event.target.closest("[data-size]");
@@ -670,8 +714,10 @@
   });
 
   const syncControls = () => {
-    for (const b of $("sizes").children) b.setAttribute("aria-pressed", String(b.dataset.size === state.size));
-    for (const b of $("zoom").children) b.setAttribute("aria-pressed", String(Number(b.dataset.zoom) === state.zoom));
+    for (const b of $("sizes").children)
+      b.setAttribute("aria-pressed", String(b.dataset.size === state.size));
+    for (const b of $("zoom").children)
+      b.setAttribute("aria-pressed", String(Number(b.dataset.zoom) === state.zoom));
     grid.style.setProperty("--zoom", state.zoom);
   };
 
@@ -680,26 +726,34 @@
   const cardsFor = (size) => {
     if (!cardsBySize.has(size)) {
       const fragment = document.createDocumentFragment();
-      const cards = data.icons.filter((icon) => icon.svgs[size]).map((icon) => {
-        const card = document.createElement("button");
-        card.type = "button";
-        card.className = "card";
-        card.dataset.name = icon.name;
-        card.title = icon.component;
-        card.innerHTML = `${glyph(icon, size)}<span class="label">${escapeHtml(icon.name)}</span>`;
-        fragment.append(card);
-        return card;
-      });
+      const cards = data.icons
+        .filter((icon) => icon.svgs[size])
+        .map((icon) => {
+          const card = document.createElement("button");
+          card.type = "button";
+          card.className = "card";
+          card.dataset.name = icon.name;
+          card.title = icon.component;
+          card.innerHTML = `${glyph(icon, size)}<span class="label">${escapeHtml(icon.name)}</span>`;
+          fragment.append(card);
+          return card;
+        });
       cardsBySize.set(size, { fragment, cards });
     }
     return cardsBySize.get(size);
   };
 
   // "chevron up", "ChevronUp" and "chevron-up" all find chevron-up
-  const normalize = (s) => s.toLowerCase().replace(/icon$/i, "").replace(/[^a-z0-9]+/g, " ").trim();
+  const normalize = (s) =>
+    s
+      .toLowerCase()
+      .replace(/icon$/i, "")
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
   const words = (s) => s.replace(/([a-z0-9])([A-Z])/g, "$1 $2");
   const matches = (icon, terms) => terms.every((term) => icon.search.includes(term));
-  for (const icon of data.icons) icon.search = `${normalize(icon.name)} ${normalize(words(icon.component))}`;
+  for (const icon of data.icons)
+    icon.search = `${normalize(icon.name)} ${normalize(words(icon.component))}`;
 
   const render = () => {
     const { cards } = cardsFor(state.size);
@@ -717,15 +771,21 @@
       shown += visible;
     }
     const total = cards.length;
-    count.textContent = terms.length ? `${shown} of ${total} icons ${where(state.size)} match “${state.query.trim()}”` : `${total} icons ${where(state.size)}`;
+    count.textContent = terms.length
+      ? `${shown} of ${total} icons ${where(state.size)} match “${state.query.trim()}”`
+      : `${total} icons ${where(state.size)}`;
 
     empty.hidden = shown > 0;
     if (!shown) {
       const elsewhere = data.sizes
         .filter((size) => size !== state.size)
-        .map((size) => [size, data.icons.filter((icon) => icon.svgs[size] && matches(icon, terms)).length])
+        .map((size) => [
+          size,
+          data.icons.filter((icon) => icon.svgs[size] && matches(icon, terms)).length,
+        ])
         .filter(([, n]) => n);
-      empty.innerHTML = `<p>No icons ${where(state.size)} match “${escapeHtml(state.query.trim())}”.</p>` +
+      empty.innerHTML =
+        `<p>No icons ${where(state.size)} match “${escapeHtml(state.query.trim())}”.</p>` +
         (elsewhere.length
           ? `<div class="suggest">${elsewhere.map(([size, n]) => `<button type="button" class="chip" data-size="${size}">${n} ${where(size)}</button>`).join("")}</div>`
           : "");
@@ -753,7 +813,9 @@
     const size = icon.svgs[state.size] ? state.size : Object.keys(icon.svgs)[0];
     const [w, h] = icon.dims[size];
     // Sizes show on their pixel grid at a whole scale; graphics are fitted to the panel
-    const scale = isSize(size) ? Math.max(2, Math.floor(160 / Math.max(w, h))) : Math.round(Math.min(2, 260 / w, 160 / h) * 100) / 100;
+    const scale = isSize(size)
+      ? Math.max(2, Math.floor(160 / Math.max(w, h)))
+      : Math.round(Math.min(2, 260 / w, 160 / h) * 100) / 100;
     detail.innerHTML = `
       <button type="button" class="copy close" data-close>Close</button>
       <div>
@@ -765,7 +827,12 @@
         <div class="canvas-caption"><span>${w} × ${h}${isSize(size) ? " canvas" : ""}</span><span>shown at ${scale}×</span></div>
       </div>
       <div class="sizes" role="group" aria-label="Sizes of this icon">
-        ${Object.keys(icon.svgs).map((s) => `<button type="button" class="chip" data-detail-size="${s}" aria-pressed="${s === size}">${groupLabel(s)}</button>`).join("")}
+        ${Object.keys(icon.svgs)
+          .map(
+            (s) =>
+              `<button type="button" class="chip" data-detail-size="${s}" aria-pressed="${s === size}">${groupLabel(s)}</button>`,
+          )
+          .join("")}
       </div>
       <div class="snippets">
         ${snippet("React", `import { ${icon.component} } from "@boppl/icons/react/${size}"`)}
@@ -798,7 +865,10 @@
   const flash = (button, text) => {
     button.textContent = text;
     button.classList.add("done");
-    setTimeout(() => { button.textContent = "Copy"; button.classList.remove("done"); }, 1400);
+    setTimeout(() => {
+      button.textContent = "Copy";
+      button.classList.remove("done");
+    }, 1400);
   };
 
   grid.addEventListener("click", (event) => {
@@ -821,7 +891,10 @@
   }
 
   // Search, with "/" to focus and Escape to clear or close
-  query.addEventListener("input", () => { state.query = query.value; render(); });
+  query.addEventListener("input", () => {
+    state.query = query.value;
+    render();
+  });
   document.addEventListener("keydown", (event) => {
     const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName);
     if (event.key === "/" && !typing) {
@@ -829,7 +902,11 @@
       query.focus();
     } else if (event.key === "Escape") {
       if (state.selected) select(null);
-      else if (query.value) { query.value = ""; state.query = ""; render(); }
+      else if (query.value) {
+        query.value = "";
+        state.query = "";
+        render();
+      }
     }
   });
 

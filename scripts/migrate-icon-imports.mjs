@@ -66,12 +66,18 @@ const sourceFiles = (dir) =>
 const parseCode = (code, file) =>
   parse(code, {
     sourceType: "module",
-    plugins: file.endsWith(".ts") ? ["typescript"] : file.endsWith(".tsx") ? ["typescript", "jsx"] : ["jsx"],
+    plugins: file.endsWith(".ts")
+      ? ["typescript"]
+      : file.endsWith(".tsx")
+        ? ["typescript", "jsx"]
+        : ["jsx"],
   });
 
 // Applies [start, end, text] edits to code, last first so earlier offsets stay valid
 const applyEdits = (code, edits) =>
-  edits.sort((a, b) => b[0] - a[0]).reduce((out, [start, end, text]) => out.slice(0, start) + text + out.slice(end), code);
+  edits
+    .sort((a, b) => b[0] - a[0])
+    .reduce((out, [start, end, text]) => out.slice(0, start) + text + out.slice(end), code);
 
 // Step 1: svgr imports -> one react import per size, keeping local names
 const svgrImport =
@@ -122,13 +128,21 @@ const removeAliases = (code, file, report) => {
     Program(program) {
       const iconImports = program
         .get("body")
-        .filter((p) => p.isImportDeclaration() && /^@boppl\/icons\/react\/\d+$/.test(p.node.source.value));
+        .filter(
+          (p) => p.isImportDeclaration() && /^@boppl\/icons\/react\/\d+$/.test(p.node.source.value),
+        );
 
       // Aliases, grouped by the name they would be renamed to
       const aliases = iconImports.flatMap((decl) =>
         decl.node.specifiers
           .filter((s) => s.type === "ImportSpecifier" && s.imported.name !== s.local.name)
-          .map((s) => ({ decl, specifier: s, alias: s.local.name, name: s.imported.name, source: decl.node.source.value })),
+          .map((s) => ({
+            decl,
+            specifier: s,
+            alias: s.local.name,
+            name: s.imported.name,
+            source: decl.node.source.value,
+          })),
       );
       const renamed = new Set();
 
@@ -144,10 +158,14 @@ const removeAliases = (code, file, report) => {
           existing.path.node.imported.name === name;
         const otherSource = aliases.some((a) => a.name === name && a.source !== source);
         // A nested variable called `name` would capture the renamed uses
-        const shadowed = binding.referencePaths.some((ref) => ref.scope.getBinding(name) !== existing);
+        const shadowed = binding.referencePaths.some(
+          (ref) => ref.scope.getBinding(name) !== existing,
+        );
 
         if ((existing && !sameIcon) || otherSource || shadowed) {
-          report.kept.push(`${file}: ${name} as ${alias}${shadowed ? " (shadowed)" : " (name taken)"}`);
+          report.kept.push(
+            `${file}: ${name} as ${alias}${shadowed ? " (shadowed)" : " (name taken)"}`,
+          );
           continue;
         }
 
@@ -156,7 +174,13 @@ const removeAliases = (code, file, report) => {
           if (parent.type === "ObjectProperty" && parent.shorthand && parent.value === node) {
             edits.push([parent.start, parent.end, `${alias}: ${name}`]);
           } else if (parent.type === "ExportSpecifier" && parent.local === node) {
-            edits.push([parent.start, parent.end, parent.exported.name === alias ? `${name} as ${alias}` : `${name} as ${parent.exported.name}`]);
+            edits.push([
+              parent.start,
+              parent.end,
+              parent.exported.name === alias
+                ? `${name} as ${alias}`
+                : `${name} as ${parent.exported.name}`,
+            ]);
           } else {
             edits.push([node.start, node.end, name]);
           }
@@ -169,7 +193,8 @@ const removeAliases = (code, file, report) => {
       program.traverse({
         JSXClosingElement(path) {
           const opening = path.parent.openingElement.name;
-          const edit = opening.type === "JSXIdentifier" && edits.find(([start]) => start === opening.start);
+          const edit =
+            opening.type === "JSXIdentifier" && edits.find(([start]) => start === opening.start);
           if (edit) edits.push([path.node.name.start, path.node.name.end, edit[2]]);
         },
       });
@@ -178,9 +203,23 @@ const removeAliases = (code, file, report) => {
       for (const decl of iconImports) {
         const specifiers = decl.node.specifiers;
         if (!specifiers.some((s) => renamed.has(s))) continue;
-        const names = [...new Set(specifiers.map((s) => (renamed.has(s) || s.imported.name === s.local.name ? s.imported.name : `${s.imported.name} as ${s.local.name}`)))];
-        const semicolon = code.slice(decl.node.start, decl.node.end).trimEnd().endsWith(";") ? ";" : "";
-        declarations.push([decl.node.start, decl.node.end, `import { ${names.join(", ")} } from "${decl.node.source.value}"${semicolon}`]);
+        const names = [
+          ...new Set(
+            specifiers.map((s) =>
+              renamed.has(s) || s.imported.name === s.local.name
+                ? s.imported.name
+                : `${s.imported.name} as ${s.local.name}`,
+            ),
+          ),
+        ];
+        const semicolon = code.slice(decl.node.start, decl.node.end).trimEnd().endsWith(";")
+          ? ";"
+          : "";
+        declarations.push([
+          decl.node.start,
+          decl.node.end,
+          `import { ${names.join(", ")} } from "${decl.node.source.value}"${semicolon}`,
+        ]);
       }
     },
   });
@@ -195,10 +234,17 @@ const removeAliases = (code, file, report) => {
     let leftover = null;
     traverse(check, {
       "Identifier|JSXIdentifier"(path) {
-        if (gone.has(path.node.name) && !path.parentPath.isObjectProperty({ key: path.node }) && !path.parentPath.isMemberExpression({ property: path.node }) && !path.parentPath.isExportSpecifier()) leftover ??= path.node;
+        if (
+          gone.has(path.node.name) &&
+          !path.parentPath.isObjectProperty({ key: path.node }) &&
+          !path.parentPath.isMemberExpression({ property: path.node }) &&
+          !path.parentPath.isExportSpecifier()
+        )
+          leftover ??= path.node;
       },
     });
-    if (leftover) throw new Error(`${leftover.name} is still used on line ${leftover.loc.start.line}`);
+    if (leftover)
+      throw new Error(`${leftover.name} is still used on line ${leftover.loc.start.line}`);
   } catch (error) {
     report.failed.push(`${file}: left unchanged, ${error.message}`);
     return code;
